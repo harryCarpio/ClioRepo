@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"  >
+    
+    <f:view contentType="text/html">
+
+    <h:head>
+        
+        <f:facet name="first">
+                <meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Clio Admin</title>e>
+        </f:facet>
+        
+        <link type="text/css" rel="stylesheet" href="../CSS/styles.css"/>
+        
+        <style type="text/css">
+                .ui-layout-north {
+                    z-index:20 !important;
+                    overflow:visible !important;;
+                }
+
+                .ui-layout-north .ui-layout-unit-content {
+                    overflow:visible !important;
+                }
+            </style>
+
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true" >
+
+                <p:layoutUnit id="top" position="north" >
+                    <p:graphicImage id="logo" value="/images/logo.png" />
+                    
+                    <p:breadCrumb styleClass="menu">  
+                        <p:menuitem value="Inicio" url="#" /> 
+                        <p:menuitem value="Laboratorios" url="laboratorios.xhtml" styleClass="itemmenu"/>  
+                        <p:menuitem value="Usuarios" url="usuarios.xhtml" styleClass="itemmenu"/>  
+                        <p:menuitem value="Sanciones" url="sanciones.xhtml" styleClass="itemmenu"/>  
+                        <p:menuitem value="Reportes" url="reportes.xhtml" styleClass="itemmenu"/>  
+                        <p:menuitem value="Administración" url="administracion.xhtml" styleClass="itemmenu"/>  
+                        <p:menuitem value="Cerrar Sesión" url="#" styleClass="itemmenu"/>                  
+                    </p:breadCrumb> 
+
+                </p:layoutUnit>
+
+                <p:layoutUnit id="bottom" position="south" size="60">
+                    
+                </p:layoutUnit>
+
+                <p:layoutUnit id="left" position="west" size="300" resizable="true" closable="false" collapsible="false" header="Menú Laboratorio" minSize="200">
+                    <h:form>  
+              
+                    <p:growl id="messages" autoUpdate="true"/>  
+                    <p:panelMenu style="width:290px">  
+                        <p:submenu label="PC_X">  
+                            <p:menuitem value="Apagar"/>  
+                            <p:menuitem value="Cerrar Sesión" />  
+                            <p:menuitem value="Ver Procesos"/> 
+                        </p:submenu>  
+                        <p:submenu label="Usuario en PC_X">  
+                            <p:menuitem value="Sancionar" />  
+                            <p:menuitem value="Ver Datos" />
+                            <p:menuitem value="Enviar Mensaje" />  
+                        </p:submenu>  
+                         
+                    </p:panelMenu> 
+                    </h:form>
+                </p:layoutUnit>
+
+
+            <p:layoutUnit id="center" position="center" style="border-color: white;">
+                    
+                    <h:form id="form">  
+  
+                        <p:growl id="growl" showDetail="true" />  
+
+                        <p:tabView id="tabView" dynamic="true" effect="fade" effectDuration="normal">  
+
+                            <p:ajax event="tabChange" listener="#{tabBean.onTabChange}" update=":form:growl"/>  
+
+                            <p:tab title="OrionI" id="OrionI">  
+                                ORION_I 
+                            </p:tab>  
+
+                            <p:tab title="OrionD" id="OrionD">  
+                                <h:form id="form">  
+                                    <p:dataGrid var="car" value="#{tableBean.cars}" columns="3"  
+                                        rows="12" paginator="true"  
+                                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                        rowsPerPageTemplate="9,12,15">  
+
+                                        <p:panel header="#{car.model}" style="text-align:center">  
+                                            <h:panelGrid columns="1" style="width:100%">  
+                                                <p:graphicImage value="/images/cars/#{car.manufacturer}.jpg"/>   
+
+                                                <h:outputText value="#{car.year}" />  
+
+                                                <p:commandLink update=":form:carDetail" oncomplete="carDialog.show()" title="View Detail">  
+                                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />   
+                                                    <f:setPropertyActionListener value="#{car}"   
+                                                            target="#{tableBean.selectedCar}" />  
+                                                </p:commandLink>  
+                                            </h:panelGrid>  
+                                        </p:panel>  
+
+                                    </p:dataGrid>  
+
+                                    <p:dialog header="Car Detail" widgetVar="carDialog" modal="true">  
+                                        <p:outputPanel id="carDetail" style="text-align:center;" layout="block">  
+
+                                            <p:graphicImage value="/images/cars/#{tableBean.selectedCar.manufacturer}.jpg"/>  
+
+                                            <h:panelGrid  columns="2" cellpadding="5">  
+                                                <h:outputLabel for="modelNo" value="Model No: " />  
+                                                <h:outputText id="modelNo" value="#{tableBean.selectedCar.model}" />  
+
+                                                <h:outputLabel for="year" value="Year: " />  
+                                                <h:outputText id="year" value="#{tableBean.selectedCar.year}" />  
+
+                                                <h:outputLabel for="color" value="Color: " />  
+                                                <h:outputText id="color" value="#{tableBean.selectedCar.color}" style="color:#{tableBean.selectedCar.color}"/>  
+                                            </h:panelGrid>  
+                                        </p:outputPanel>  
+                                    </p:dialog>  
+
+                                </h:form>  
+                            </p:tab>    
+
+                        </p:tabView>  
+
+                    </h:form>  
+
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+            <p:dialog header="Basic Dialog" widgetVar="dlg1" modal="true">
+                <h:outputText value="Resistance to PrimeFaces is futile!" />
+            </p:dialog>
+
+
+    </h:body>
+        </f:view>
+
+</html>
+
